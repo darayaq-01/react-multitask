@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import Todo from './components/Todo'
+import TodoForm from './components/TodoForm'
+
+import './App.css'
+import {
+  Container,
+  Col,
+  Row
+} from 'react-bootstrap';
 
 function App() {
+  const [todos, setTodos] = useState([])
+  const addTodo = (text) => {
+    const newTodos = [
+      ...todos,
+      { text }
+    ]
+    setTodos(newTodos)
+  }
+
+  const completeTodo = (index) => {
+    const newTodos = [...todos]
+    newTodos[index].isCompleted = !newTodos[index].isCompleted
+    setTodos(newTodos)
+  }
+
+  const removeTodo = (index) => {
+    const newTodos = [...todos]
+    newTodos.splice(index, 1)
+    setTodos(newTodos)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Container
+      border="light"
+      className="wrapper m-3 p-2"
+    >
+      <Row className="justify-content-md-center">
+        <Col>
+          <h1>To-Do list</h1>
+          <div className="todo-list">
+            {todos.map((todo, index) => (
+              <Todo
+                key={index}
+                index={index}
+                todo={todo}
+                completeTodo={completeTodo}
+                removeTodo={removeTodo}
+              />
+            ))}
+            <TodoForm addTodo={addTodo} />
+          </div>
+        </Col>
+      </Row>
+    </Container>
+  )
 }
 
 export default App;
